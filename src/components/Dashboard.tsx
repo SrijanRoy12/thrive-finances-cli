@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus, TrendingUp, TrendingDown, DollarSign, Target } from "lucide-react";
+import { Plus, TrendingUp, TrendingDown, DollarSign, Target, LogOut } from "lucide-react";
 import { TransactionForm } from "./TransactionForm";
 import { TransactionList } from "./TransactionList";
 import { BudgetOverview } from "./BudgetOverview";
 import { MonthlyChart } from "./MonthlyChart";
+import { useAuth } from "@/contexts/AuthContext";
 
 export interface Transaction {
   id: string;
@@ -23,6 +24,7 @@ export interface Budget {
 }
 
 export const Dashboard = () => {
+  const { user, logout } = useAuth();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [budgets, setBudgets] = useState<Budget[]>([
     { category: "Food", limit: 500, spent: 0 },
@@ -34,25 +36,31 @@ export const Dashboard = () => {
 
   // Load data from localStorage on mount
   useEffect(() => {
-    const savedTransactions = localStorage.getItem('finance-transactions');
-    const savedBudgets = localStorage.getItem('finance-budgets');
-    
-    if (savedTransactions) {
-      setTransactions(JSON.parse(savedTransactions));
+    if (user?.id) {
+      const savedTransactions = localStorage.getItem(`finance-transactions-${user.id}`);
+      const savedBudgets = localStorage.getItem(`finance-budgets-${user.id}`);
+      
+      if (savedTransactions) {
+        setTransactions(JSON.parse(savedTransactions));
+      }
+      if (savedBudgets) {
+        setBudgets(JSON.parse(savedBudgets));
+      }
     }
-    if (savedBudgets) {
-      setBudgets(JSON.parse(savedBudgets));
-    }
-  }, []);
+  }, [user?.id]);
 
   // Save to localStorage whenever data changes
   useEffect(() => {
-    localStorage.setItem('finance-transactions', JSON.stringify(transactions));
-  }, [transactions]);
+    if (user?.id) {
+      localStorage.setItem(`finance-transactions-${user.id}`, JSON.stringify(transactions));
+    }
+  }, [transactions, user?.id]);
 
   useEffect(() => {
-    localStorage.setItem('finance-budgets', JSON.stringify(budgets));
-  }, [budgets]);
+    if (user?.id) {
+      localStorage.setItem(`finance-budgets-${user.id}`, JSON.stringify(budgets));
+    }
+  }, [budgets, user?.id]);
 
   // Calculate totals
   const totalIncome = transactions
@@ -96,21 +104,31 @@ export const Dashboard = () => {
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-              Financial Dashboard
+              Welcome back, {user?.username}!
             </h1>
             <p className="text-muted-foreground mt-2">
               Track your income, expenses, and budgets
             </p>
           </div>
-          <Button 
-            onClick={() => setShowTransactionForm(true)}
-            variant="gradient"
-            size="lg"
-            className="shadow-glow"
-          >
-            <Plus className="w-5 h-5" />
-            Add Transaction
-          </Button>
+          <div className="flex gap-3">
+            <Button 
+              onClick={() => setShowTransactionForm(true)}
+              variant="gradient"
+              size="lg"
+              className="shadow-glow"
+            >
+              <Plus className="w-5 h-5" />
+              Add Transaction
+            </Button>
+            <Button 
+              onClick={logout}
+              variant="outline"
+              size="lg"
+            >
+              <LogOut className="w-5 h-5" />
+              Sign Out
+            </Button>
+          </div>
         </div>
 
         {/* Overview Cards */}
