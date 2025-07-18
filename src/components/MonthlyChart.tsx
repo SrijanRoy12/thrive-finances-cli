@@ -34,29 +34,62 @@ export const MonthlyChart = ({ transactions }: MonthlyChartProps) => {
   });
 
   return (
-    <Card className="bg-gradient-card shadow-elevated border-0">
-      <CardHeader>
-        <CardTitle>Monthly Overview</CardTitle>
+    <Card className="bg-gradient-card shadow-elevated border-0 hover-lift">
+      <CardHeader className="animate-slide-in-top">
+        <CardTitle className="flex items-center gap-2 bg-gradient-primary bg-clip-text text-transparent">
+          📊 Monthly Overview
+        </CardTitle>
       </CardHeader>
       <CardContent>
         {chartData.length === 0 ? (
-          <div className="text-center py-8 text-muted-foreground">
-            <p>No data to display. Add some transactions to see your monthly overview.</p>
+          <div className="text-center py-12 text-muted-foreground animate-bounce-in">
+            <div className="w-16 h-16 mx-auto mb-4 bg-gradient-primary rounded-full flex items-center justify-center animate-float">
+              <span className="text-2xl">📊</span>
+            </div>
+            <p className="text-lg font-medium">No data to display</p>
+            <p className="text-sm">Add some transactions to see your monthly overview!</p>
           </div>
         ) : (
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis />
-              <Tooltip 
-                formatter={(value: number) => [`$${value.toFixed(2)}`, '']}
-                labelFormatter={(label) => `Month: ${label}`}
-              />
-              <Bar dataKey="income" fill="hsl(var(--income))" name="Income" />
-              <Bar dataKey="expenses" fill="hsl(var(--expense))" name="Expenses" />
-            </BarChart>
-          </ResponsiveContainer>
+          <div className="animate-fade-in animation-delay-300">
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={chartData} className="animate-slide-in-bottom">
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis 
+                  dataKey="month" 
+                  stroke="hsl(var(--muted-foreground))"
+                  fontSize={12}
+                />
+                <YAxis 
+                  stroke="hsl(var(--muted-foreground))"
+                  fontSize={12}
+                />
+                <Tooltip 
+                  formatter={(value: number) => [`$${value.toFixed(2)}`, '']}
+                  labelFormatter={(label) => `Month: ${label}`}
+                  contentStyle={{
+                    backgroundColor: 'hsl(var(--card))',
+                    border: '1px solid hsl(var(--border))',
+                    borderRadius: '8px',
+                    boxShadow: '0 10px 15px -3px hsl(0 0% 0% / 0.1)',
+                  }}
+                />
+                <Bar 
+                  dataKey="income" 
+                  fill="hsl(var(--income))" 
+                  name="Income"
+                  radius={[4, 4, 0, 0]}
+                  className="hover-lift"
+                />
+                <Bar 
+                  dataKey="expenses" 
+                  fill="hsl(var(--expense))" 
+                  name="Expenses"
+                  radius={[4, 4, 0, 0]}
+                  className="hover-lift"
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         )}
       </CardContent>
     </Card>

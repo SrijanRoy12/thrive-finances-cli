@@ -98,32 +98,40 @@ export const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted/20">
-      <div className="container mx-auto p-6">
+    <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 relative overflow-hidden">
+      {/* Animated background elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-primary rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-blob"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-secondary rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-blob animation-delay-2000"></div>
+        <div className="absolute top-1/2 left-1/2 w-80 h-80 bg-gradient-accent rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-blob animation-delay-4000"></div>
+      </div>
+
+      <div className="container mx-auto p-6 relative z-10">
         {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+        <div className="flex justify-between items-center mb-8 animate-slide-in-top">
+          <div className="animate-fade-in">
+            <h1 className="text-5xl font-bold bg-gradient-primary bg-clip-text text-transparent animate-gradient-shift">
               Welcome back, {user?.username}!
             </h1>
-            <p className="text-muted-foreground mt-2">
-              Track your income, expenses, and budgets
+            <p className="text-muted-foreground mt-2 text-lg animate-fade-in animation-delay-200">
+              Track your income, expenses, and budgets with style
             </p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-3 animate-slide-in-left animation-delay-300">
             <Button 
               onClick={() => setShowTransactionForm(true)}
               variant="gradient"
               size="lg"
-              className="shadow-glow"
+              className="shadow-glow hover-lift btn-magnetic animate-bounce-in animation-delay-400"
             >
-              <Plus className="w-5 h-5" />
+              <Plus className="w-5 h-5 animate-pulse" />
               Add Transaction
             </Button>
             <Button 
               onClick={logout}
               variant="outline"
               size="lg"
+              className="hover-scale animate-bounce-in animation-delay-500"
             >
               <LogOut className="w-5 h-5" />
               Sign Out
@@ -133,50 +141,62 @@ export const Dashboard = () => {
 
         {/* Overview Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <Card className="bg-gradient-card shadow-elevated border-0">
+          <Card className="bg-gradient-card shadow-elevated border-0 hover-lift hover-glow animate-bounce-in stagger-1">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Income</CardTitle>
-              <TrendingUp className="h-4 w-4 text-income" />
+              <TrendingUp className="h-4 w-4 text-income animate-float" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-income">
+              <div className="text-3xl font-bold text-income animate-counter-up">
                 ${totalIncome.toFixed(2)}
               </div>
+              <div className="text-xs text-muted-foreground mt-1 animate-fade-in animation-delay-200">
+                All time earnings
+              </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-card shadow-elevated border-0">
+          <Card className="bg-gradient-card shadow-elevated border-0 hover-lift hover-glow animate-bounce-in stagger-2">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Expenses</CardTitle>
-              <TrendingDown className="h-4 w-4 text-expense" />
+              <TrendingDown className="h-4 w-4 text-expense animate-float animation-delay-200" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-expense">
+              <div className="text-3xl font-bold text-expense animate-counter-up animation-delay-100">
                 ${totalExpenses.toFixed(2)}
               </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gradient-card shadow-elevated border-0">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Net Savings</CardTitle>
-              <DollarSign className="h-4 w-4 text-primary" />
-            </CardHeader>
-            <CardContent>
-              <div className={`text-2xl font-bold ${netSavings >= 0 ? 'text-income' : 'text-expense'}`}>
-                ${netSavings.toFixed(2)}
+              <div className="text-xs text-muted-foreground mt-1 animate-fade-in animation-delay-300">
+                All time spending
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-card shadow-elevated border-0">
+          <Card className="bg-gradient-card shadow-elevated border-0 hover-lift hover-glow animate-bounce-in stagger-3">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Transactions</CardTitle>
-              <Target className="h-4 w-4 text-primary" />
+              <CardTitle className="text-sm font-medium">Net Savings</CardTitle>
+              <DollarSign className="h-4 w-4 text-primary animate-float animation-delay-400" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-foreground">
+              <div className={`text-3xl font-bold animate-counter-up animation-delay-200 ${netSavings >= 0 ? 'text-income' : 'text-expense'}`}>
+                ${netSavings.toFixed(2)}
+              </div>
+              <div className="text-xs text-muted-foreground mt-1 animate-fade-in animation-delay-400">
+                {netSavings >= 0 ? 'Great savings!' : 'Budget deficit'}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-card shadow-elevated border-0 hover-lift hover-glow animate-bounce-in stagger-4">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Transactions</CardTitle>
+              <Target className="h-4 w-4 text-primary animate-float animation-delay-600" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-foreground animate-counter-up animation-delay-300">
                 {transactions.length}
+              </div>
+              <div className="text-xs text-muted-foreground mt-1 animate-fade-in animation-delay-500">
+                Total recorded
               </div>
             </CardContent>
           </Card>
@@ -184,15 +204,21 @@ export const Dashboard = () => {
 
         {/* Charts and Budget Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          <MonthlyChart transactions={transactions} />
-          <BudgetOverview budgets={budgets} />
+          <div className="animate-slide-in-left animation-delay-600">
+            <MonthlyChart transactions={transactions} />
+          </div>
+          <div className="animate-slide-in-left animation-delay-700">
+            <BudgetOverview budgets={budgets} />
+          </div>
         </div>
 
         {/* Recent Transactions */}
-        <TransactionList 
-          transactions={transactions} 
-          onDeleteTransaction={deleteTransaction}
-        />
+        <div className="animate-slide-in-bottom animation-delay-800">
+          <TransactionList 
+            transactions={transactions} 
+            onDeleteTransaction={deleteTransaction}
+          />
+        </div>
 
         {/* Transaction Form Modal */}
         {showTransactionForm && (
