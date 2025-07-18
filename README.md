@@ -1,4 +1,4 @@
-# Welcome to your Lovable project
+# 💸 Personal Finance Management App (CLI)
 
 ## Project info
 
