@@ -4,6 +4,34 @@
 
 **URL**: https://lovable.dev/projects/97574325-e845-4a0d-8099-9b77216fe025
 
+A simple command-line application to help users manage income, expenses, budgets, and financial reports.
+
+🚀 Features
+🔐 User registration & login
+
+💰 Add/update/delete income & expenses
+
+📊 Monthly/yearly financial reports
+
+🎯 Set category-wise budget limits
+
+💾 SQLite-based data storage with backup/restore
+
+🧪 Unit tests & user documentation
+
+🛠️ Tech Stack
+Python, SQLite, CLI
+
+Modules: sqlite3, datetime, getpass, unittest
+
+📦 Usage
+bash
+Copy
+Edit
+git clone https://github.com/yourusername/finance-cli-app.git
+cd finance-cli-app
+python main.py
+
 ## How can I edit this code?
 
 There are several ways of editing your application.
